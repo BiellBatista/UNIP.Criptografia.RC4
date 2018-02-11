@@ -1,0 +1,159 @@
+﻿programa Criptografia
+
+var
+	key : conjunto [0...256] de caracteres;
+	s : conjunto [0...256] de caracteres;
+	chiper : conjunto [0...256] de caracteres;
+	i, j, tamanhoKey, tamanhoPlainText : inteiro;
+
+função menu() : inteiro;
+procedimento troca (s : conjunto [0...256] de caracteres, i, j : inteiro);
+procedimento ksa(i, j, tamanhoKey : inteiro);
+procedimento prga(plain : conjunto [0...256] de caracteres, i, j, tamanhoPlainText : inteiro);
+função chiperText(plain : conjunto [0...256] de caracteres, key1 : conjunto [0...256] de caracteres, i, j, tamanhoKey, tamanhoPlainText : inteiro) : conjunto [0...256] de caracteres;
+função plainText(plain : conjunto [0...256] de caracteres, key1 : conjunto [0...256] de caracteres, i, j, tamanhoKey, tamanhoPlainText : inteiro) : conjunto [0...256] de caracteres;
+
+var
+	plain1 : conjunto [0...256] de caracteres;
+	key1 : conjunto [0...256] de caracteres;
+	i1, j1, tamanhoPlainText1, tamanhoKey1: inteiro;
+
+incio
+	escolha(menu())
+		caso 1 :
+			escreva ("#####################################################################\n");
+			escreva ("########### Digite abaixo a Mensagem a ser Criptografada ############\n");
+  			escreva ("#####################################################################\n");
+  			leia (plain);
+  			tamanhoPlainText1 <-- strlen(plain);
+			
+			escreva ("#####################################################################\n");
+  			escreva ("################# Digite abaixo a Chave Simetrica ###################\n");
+  			escreva ts("#####################################################################\n");
+  			leia (key);
+  			tamanhoKey <-- strlen(key);
+
+  			escreva ("#####################################################################\n");
+  			escreva ("##################### Mensagem Criptografada ########################\n");
+  			escreva ("#####################################################################\n");
+  			escreva (chiperText(plain, key, i, j, tamanhoKey, tamanhoPlainText));
+  			escreva ("#####################################################################\n");
+			escreva ("############ Aperte qualquer tecla para voltar ao menu ##############\n");
+			escreva ("#####################################################################\n");
+			  
+		caso 2 :
+			escreva ("#####################################################################\n");
+			escreva ("########## Digite abaixo a Mensagem a ser Desriptografada ###########\n");
+  			escreva ("#####################################################################\n");
+  			leia (plain);
+  			tamanhoPlainText <-- strlen(plain);
+
+  			escreva ("#####################################################################\n");
+  			escreva ("################# Digite abaixo a Chave Simetrica ###################\n");
+  			escreva ("#####################################################################\n");
+  			leia (key);
+  			tamanhoKey <-- strlen(key);
+
+  			escreva ("#####################################################################\n");
+  			escreva ("#################### Mensagem Desriptografada #######################\n");
+  			escreva ("#####################################################################\n");
+			escreva (plainText(plain, key, i, j, tamanhoKey, tamanhoPlainText), texto);
+			escreva ("############ Aperte qualquer tecla para voltar ao menu ##############\n");
+			escreva ("#####################################################################\n");
+			
+		senão
+			escreva ("\t\t\t Opcao Invalida!!!");
+			escreva ("#####################################################################\n");
+			
+	fim-escolha
+fim
+
+função menu() : inteiro
+	inicio
+		r : inteiro;
+		
+		escreva ("#####################################################################\n");
+		escreva ("################### Criptografia RC4 + MFC + RSA  ###################\n");
+		escreva ("#####################################################################\n");
+		escreva ("################### Escolha uma das opcoes abaixo ###################\n");
+		escreva ("#####################################################################\n");
+		escreva ("################### \t1 - Criptografar\t  ###################\n");
+		escreva ("################### \t2 - Descriptografar\t  ###################\n");
+		escreva ("#####################################################################\n");
+		escreva ("\t\t\t  Opcao: ");
+		leia (r);
+		escreva ("#####################################################################\n");
+		
+		retorne (r);
+	fim
+
+procedimento troca (s : conjunto [0...256] de caracteres, i, j : inteiro)
+	incio
+		s [i] <-- s [i] + s [j];
+		s [j] <-- s [i] - s [j];
+		s [i] <-- s [i] - s [j];
+	fim
+	
+procedimento ksa(i, j, tamanhoKey : inteiro)
+	inicio
+		para i de 0 até 256 passo 1 faça
+			s [i] <-- i;
+		fim-para
+	
+		j <-- 0;
+	
+		para i de 0 até 256 passo 1 faça
+			j <-- (j + s [i] + key [i mod tamanhoKey]) mod 256;
+			troca(s, i, j);
+		fim-para
+	
+		i <-- 0; 
+		j <-- 0;
+	fim
+	
+procedimento prga(plain : conjunto [0...256] de caracteres, i, j, tamanhoPlainText : inteiro)
+	var
+		aux : inteiro;
+		result : conjunto [0...tamanhoPlainText - 1];
+	inicio
+		para aux de 0 até tamanhoPlainText passo 1 faça
+			i <-- (i + 1) mod 256;
+			j <-- (j + s [i]) mod 256;
+			troca(s, i, j);
+			result [aux] <-- (s [(s [i] + s [j]) mod 256]) xor plain [aux];
+		fim-para
+		
+		strcpy(chiper, result);
+	fim
+	
+função chiperText(plain : conjunto [0...256] de caracteres, key1 : conjunto [0...256] de caracteres, i, j, tamanhoKey, tamanhoPlainText : inteiro) : conjunto [0...256] de caracteres
+	var
+		cont : inteiro;
+	inicio
+		cont <-- 0;
+		enquanto cont < 256 faça
+			key [cont] <-- key [cont]
+			cont++;
+		fim-enquanto
+		
+		ksa(i, j, tamanhoKey);
+		prga(plain, i, j, tamanhoPlainText);
+		
+		retorne (chiper);
+	fim
+	
+função plainText(plain : conjunto [0...256] de caracteres, key1 : conjunto [0...256] de caracteres, i, j, tamanhoKey, tamanhoPlainText : inteiro) : conjunto [0...256] de caracteres
+	var
+		cont : inteiro;
+	inicio
+		cont <-- 0;
+		enquanto (cont < 256) faça
+			key [cont] <-- key [cont]
+			cont++;
+		fim-enquanto
+		
+		ksa(i, j, tamanhoKey);
+		prga(plain, i, j, tamanhoPlainText);
+		
+		retorne (chiper);
+	fim
