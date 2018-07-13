@@ -1,4 +1,4 @@
-unsigned char key[256]; 
+unsigned char key[256];
 unsigned char s[256];
 unsigned char *chiper;
 unsigned int i, j, tamanhoKey, tamanhoPlainText;
@@ -15,10 +15,10 @@ void ksa(unsigned short *i, unsigned short *j, unsigned short *tamanhoKey)
   for (*i = 0; *i < 256; (*i)++)
   {
     s[*i] = *i;
-  } 
-  
+  }
+
   *j = 0;
- 
+
   for (*i = 0; *i < 256; (*i)++)
   {
     *j = (*j + s[*i] + key[*i % *tamanhoKey]) % 256;
@@ -30,7 +30,7 @@ void ksa(unsigned short *i, unsigned short *j, unsigned short *tamanhoKey)
 }
 
 void prga (unsigned char *plain, unsigned short *i, unsigned short *j, unsigned short *tamanhoPlainText)
-{ 
+{
   unsigned int aux;
   unsigned char result[*tamanhoPlainText-1];
 
@@ -50,7 +50,8 @@ unsigned char *chiperText(unsigned char *plain, unsigned char *key1, unsigned sh
 {
   int cont = 0;
 
-  while(cont < 256){
+  while(cont < 256)
+  {
     key[cont] = *(key1 + cont);
     cont++;
   }
@@ -65,7 +66,8 @@ unsigned char *plainText(unsigned char *plain, unsigned char *key1, unsigned sho
 {
   int cont = 0;
 
-  while(cont < 256){
+  while(cont < 256)
+  {
     key[cont] = *(key1 + cont);
     cont++;
   }
