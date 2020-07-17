@@ -75,6 +75,14 @@ void troca(unsigned char *s, unsigned short *i, unsigned short *j)
 }
 ```
 
+```
+for (*i = 0; *i < 256; (*i)++)
+{
+  *j = (*j + s[*i] + key[*i % *tamanhoKey]) % 256;
+  troca(s, i, j);
+}
+```
+
 A implementação do método 'prga' ficou da seguinte maneira:
 
 ```
