@@ -26,7 +26,7 @@ fim-para
 Após, o vetor S é processado com 256 iterações do algoritmo geração pseudoaleatória e, ao mesmo tempo, combina o resultado do algoritmo geração pseudoaleatória aos valores da chave.
 
 ```
-procedimento troca (s : conjunto [0...256] de caracteres, i, j : inteiro)
+procedimento troca(s : conjunto [0...256] de caracteres, i, j : inteiro)
 	incio
 		s [i] <-- s [i] + s [j];
 		s [j] <-- s [i] - s [j];
@@ -62,3 +62,36 @@ procedimento prga(plain : conjunto [0...256] de caracteres, i, j, tamanhoPlainTe
 ```
 
 De uma forma geral, o algoritmo consiste em utilizar um array que a cada utilização tem os seus valores permutados, e misturados com a chave. Esta chave utilizada na inicialização do array pode ter até 256 bytes (2048 bits), embora o algoritmo seja mais eficiente quando é menor, pois a perturbação aleatória induzida no array é superior.
+
+## Implementação
+A implementação do método 'troca' ficou da seguinte maneira:
+
+```
+void troca(unsigned char *s, unsigned short *i, unsigned short *j)
+{
+  s[*i] = s[*i] + s[*j];
+  s[*j] = s[*i] - s[*j];
+  s[*i] = s[*i] - s[*j];
+}
+```
+
+A implementação do método 'prga' ficou da seguinte maneira:
+
+```
+void prga (unsigned char *plain, unsigned short *i, unsigned short *j, unsigned short *tamanhoPlainText)
+{
+  unsigned int aux;
+  unsigned char result[*tamanhoPlainText-1];
+
+  for (aux = 0; aux < *tamanhoPlainText; aux++)
+  {
+    *i = (*i + 1) % 256;
+    *j = (*j + s[*i]) % 256;
+    troca(s, i, j);
+    result[aux] = (s[(s[*i] + s[*j]) % 256]) ^ *(plain + aux);
+  }
+
+  chiper = (unsigned char*) calloc((*tamanhoPlainText - 1), (sizeof(unsigned char)));
+  strcpy(chiper, result);
+}
+```
