@@ -78,7 +78,7 @@ void troca(unsigned char *s, unsigned short *i, unsigned short *j)
 A implementação do método 'prga' ficou da seguinte maneira:
 
 ```
-void prga (unsigned char *plain, unsigned short *i, unsigned short *j, unsigned short *tamanhoPlainText)
+void prga(unsigned char *plain, unsigned short *i, unsigned short *j, unsigned short *tamanhoPlainText)
 {
   unsigned int aux;
   unsigned char result[*tamanhoPlainText-1];
